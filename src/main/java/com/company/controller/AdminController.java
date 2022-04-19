@@ -4,6 +4,7 @@ import com.company.container.ComponentContainer;
 import com.company.database.Database;
 import com.company.enums.AdminStatus;
 import com.company.enums.CustomerStatus;
+import com.company.enums.Data;
 import com.company.model.Customer;
 import com.company.model.Product;
 import com.company.service.CategoryService;
@@ -38,14 +39,14 @@ public class AdminController {
         if(ComponentContainer.productStepMap.containsKey(chatId)){
             Product product = ComponentContainer.productMap.get(chatId);
 
-            if(ComponentContainer.productStepMap.get(chatId).equals(AdminStatus.ENTERED_PRODUCT_PRICE)){
+            if(ComponentContainer.productStepMap.get(chatId).equals(AdminStatus.ENTERED_PRODUCT_DESCRIPTION)){
                 product.setImage(photoSizeList.get(photoSizeList.size()-1).getFileId());
 
                 SendPhoto sendPhoto = new SendPhoto(chatId, new InputFile(product.getImage()));
-                sendPhoto.setCaption(String.format("Kategoriya: %s\n" +
-                        "Mahsulot: %s \n Narxi: %s\n\n Quyidagi mahsulot bazaga qo'shilsinmi?",
-                        CategoryService.getCategoryById(product.getCategoryId()).getName(),
-                        product.getName(), product.getPrice()));
+                sendPhoto.setCaption(String.format("Kategoriya: %s\n  ID : %s \n" +
+                        "Mahsulot: %s \n Narxi: %s\n Tafsiloti:  %s \n\n Quyidagi mahsulot bazaga qo'shilsinmi?",
+                        CategoryService.getCategoryById(product.getCategoryId()).getName(),product.getId(),
+                        product.getName(), product.getPrice(),product.getDescription() ));
                 sendPhoto.setReplyMarkup(InlineKeyboardUtil.confirmAddProductMarkup());
 
                 ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendPhoto);
@@ -92,12 +93,22 @@ public class AdminController {
 
                 if (price <= 0) {
                     sendMessage.setText("Narx noto'g'ri kiritildi, Qaytadan narxni kiriting: ");
-                } else {
+                }  else {
                     product.setPrice(price);
                     ComponentContainer.productStepMap.put(chatId, AdminStatus.ENTERED_PRODUCT_PRICE);
 
                     sendMessage.setText("Mahsulotning rasmini jo'nating: ");
                 }
+
+            }else if (ComponentContainer.productStepMap.get(chatId).equals(AdminStatus.ENTERED_PRODUCT_PRICE)){
+                product.setDescription(text);
+                ComponentContainer.productStepMap.put(chatId,AdminStatus.ENTERED_PRODUCT_DESCRIPTION);
+            } else if (ComponentContainer.productStepMap.get(chatId).equals(AdminStatus.DELETE_PRODUCT)){
+                ProductService.deleteProduct(Integer.valueOf(text));
+                sendMessage.setText("Mahsulot ochirildi :");
+                sendMessage.setReplyMarkup(InlineKeyboardUtil.productAdminMenu());
+
+
             }
         }
 
@@ -124,7 +135,7 @@ public class AdminController {
 
             ComponentContainer.productStepMap.put(chatId, AdminStatus.CLICKED_ADD_PRODUCT);
             ComponentContainer.productMap.put(chatId,
-                    new Product(null, null, null, null,null,false));
+                    new Product(null, null, null, null,null,null,false));
 
         } else if (data.startsWith("add_product_category_id")) {
             DeleteMessage deleteMessage = new DeleteMessage(
@@ -137,14 +148,13 @@ public class AdminController {
             SendMessage sendMessage = new SendMessage(
                     chatId, "Mahsulot nomini kiriting : "
             );
-
             ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
 
             ComponentContainer.productStepMap.put(chatId, AdminStatus.SELECT_CATEGORY_FOR_ADD_PRODUCT);
             Product product = ComponentContainer.productMap.get(chatId);
             product.setCategoryId(categoryId);
         }
-        else if(data.equals("add_product_commit")){
+        else if(data.equals(String.valueOf(Data.ADD_PRODUCT_COMMIT))){
             DeleteMessage deleteMessage = new DeleteMessage(
                     chatId, message.getMessageId()
             );
@@ -158,12 +168,12 @@ public class AdminController {
             ComponentContainer.productStepMap.remove(chatId);
 
             SendMessage sendMessage = new SendMessage(
-                    chatId, product.getName()+"saqlandi.\n\n"+"Amalni tanlang:"
+                    chatId, product.getName()+" saqlandi.\n\n"+"Amalni tanlang:"
             );
             sendMessage.setReplyMarkup(InlineKeyboardUtil.productAdminMenu());
             ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
 
-        }else if(data.equals("add_product_cancel")){
+        }else if(data.equals( String.valueOf(Data.ADD_PRODUCT_CANCEL))){
             DeleteMessage deleteMessage = new DeleteMessage(
                     chatId, message.getMessageId()
             );
@@ -188,10 +198,10 @@ public class AdminController {
 
             for (Product product : Database.productList) {
                 SendPhoto sendPhoto = new SendPhoto(chatId, new InputFile(product.getImage()));
-                sendPhoto.setCaption(String.format("Kategoriya: %s\n" +
-                                "Mahsulot: %s \n Narxi: %s\n",
-                        CategoryService.getCategoryById(product.getCategoryId()).getName(),
-                        product.getName(), product.getPrice()));
+                sendPhoto.setCaption(String.format(" Kategoriya: %s\n ID: %s\n " +
+                                "Mahsulot: %s\n Narxi: %s\n Tafsiloti: %s\n" ,
+                        CategoryService.getCategoryById(product.getCategoryId()).getName(),product.getId(),
+                        product.getName(), product.getPrice(),product.getDescription()));
                 ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendPhoto);
             }
 
@@ -200,10 +210,27 @@ public class AdminController {
             );
             sendMessage.setReplyMarkup(InlineKeyboardUtil.productAdminMenu());
             ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
-        }else if (data.equals("")){
+        }else if (data.equals("delete_product")) {
+            DeleteMessage deleteMessage = new DeleteMessage(
+                    chatId, message.getMessageId()
+            );
+            ComponentContainer.MY_TELEGRAM_BOT.sendMsg(deleteMessage);
 
+            ProductService.loadProductList();
+
+            for (Product product : Database.productList) {
+                SendPhoto sendPhoto = new SendPhoto(chatId, new InputFile(product.getImage()));
+                sendPhoto.setCaption(String.format(" Kategoriya: %s\n ID: %s\n " +
+                                "Mahsulot: %s\n Narxi: %s\n Tafsiloti: %s\n" ,
+                        CategoryService.getCategoryById(product.getCategoryId()).getName(),product.getId(),
+                        product.getName(), product.getPrice(),product.getDescription()));
+                ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendPhoto);
+            }
+            SendMessage sendMessage =new SendMessage(chatId,"O'chirmoqchi bo'lgan mahsulotning ID sini kiriting: ");
+            ComponentContainer.productStepMap.put(chatId,AdminStatus.DELETE_PRODUCT);
+
+            ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
         }
-
     }
 
 
