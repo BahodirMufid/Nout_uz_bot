@@ -4,6 +4,7 @@ import com.company.Main;
 import com.company.container.ComponentContainer;
 import com.company.database.Database;
 import com.company.enums.CustomerStatus;
+import com.company.enums.Data;
 import com.company.model.Customer;
 import com.company.model.Product;
 import com.company.service.CustomerService;
@@ -44,10 +45,11 @@ public class MainController {
         String customerId = String.valueOf(contact.getUserId());
 
         Customer customer = CustomerService.getCustomerById(customerId);
-        if (customer != null) {
+        if (customer == null) {
             System.out.println("ssssss");
             customer = new Customer(customerId, contact.getFirstName(),
                     contact.getLastName(), contact.getPhoneNumber(), CustomerStatus.SHARE_CONTACT);
+
             CustomerService.addCustomer(customer);
 
             SendMessage sendMessage = new SendMessage();
@@ -71,17 +73,25 @@ public class MainController {
 
         if (text.equals("/start")) {
 
-            if(customer == null){
+            if (customer == null) {
                 String messageText = String.format("ID: %s\nFirst name:%s\n" +
                                 "Last name: %s\nUsername: %s\n\nclicked START.",
                         user.getId(), user.getFirstName(), user.getLastName(), user.getUserName());
                 adminController.notificationToAdmin(messageText);
-            }
-            sendMessage.setText("<b>Assalomu Aleykum!</b>\n" +
-                    "Raqamingizmi jo'nating.");
-            sendMessage.setParseMode(ParseMode.HTML);
+                sendMessage.setText("<b>Assalomu Aleykum!</b>\n" +
+                        "Raqamingizmi jo'nating.");
+                sendMessage.setParseMode(ParseMode.HTML);
+                sendMessage.setReplyMarkup(KeyboardUtil.contactMarkup());
+                ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
 
-           sendMessage.setReplyMarkup(KeyboardUtil.contactMarkup());
+            } else{
+                sendMessage.setText("<b>💻Assalomu Aleykum nout.uz Botiga Hush Kelibsiz ! \n\n Menudan Birortasini Tanlang</b>\n");
+                sendMessage.setParseMode(ParseMode.HTML);
+
+                sendMessage.setReplyMarkup(InlineKeyboardUtil.Menu());
+            ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
+            }
+
 
 //        }else if (){
 
@@ -93,14 +103,14 @@ public class MainController {
 //            sendMessage.setReplyMarkup(InlineKeyboardUtil.Menu());
 //        }
 
-        ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
     }
 
 
     public void handleCallBack(User user, Message message, String data) {
         String chatId = String.valueOf(message.getChatId());
 
-        if (data.equals("our_contacts")) {
+        if (data.equals(String.valueOf(Data.OUR_CONTACTS))) {
+
             DeleteMessage deleteMessage = new DeleteMessage(
                     chatId, message.getMessageId()
             );
@@ -110,7 +120,7 @@ public class MainController {
                     chatId, "BIZNING IJTIMOIY SAHIFA : ");
             sendMessage.setReplyMarkup(InlineKeyboardUtil.NetAddressMenu());
             ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
-        } else if (data.equals("product_menu")) {
+        } else if (data.equals(String.valueOf(Data.PRODUCT_MENU))) {
             DeleteMessage deleteMessage = new DeleteMessage(
                     chatId, message.getMessageId()
             );
@@ -120,7 +130,7 @@ public class MainController {
                     chatId, "Brand lardan Birini tanlang :\n\n Pastagilardan birortasini tanlang 🔽 ");
             sendMessage.setReplyMarkup(InlineKeyboardUtil.Brands());
             ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
-        }else if (data.equals("back")) {
+        } else if (data.equals(String.valueOf(Data.BACK))) {
             DeleteMessage deleteMessage = new DeleteMessage(
                     chatId, message.getMessageId()
             );
@@ -130,20 +140,21 @@ public class MainController {
                     chatId, "Assosiy Menu  :\n\n Pastagilardan birortasini tanlang 🔽");
             sendMessage.setReplyMarkup(InlineKeyboardUtil.Menu());
             ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
-        }else if (data.equals("asus")){
-            DeleteMessage deleteMessage = new DeleteMessage(
-                    chatId, message.getMessageId()
-            );
-            ComponentContainer.MY_TELEGRAM_BOT.sendMsg(deleteMessage);
-
-            List<Product> products = Database.productList.stream().filter(product -> product.getBrandId().equals(product.getId())).toList();
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(String.valueOf(user.getId()));
-            sendMessage.setText("Asus Rog ");
-            sendMessage.setReplyMarkup(InlineKeyboardUtil.productMenu(products));
-            ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
-
-
         }
+//        else if (data.equals(D)){
+//            DeleteMessage deleteMessage = new DeleteMessage(
+//                    chatId, message.getMessageId()
+//            );
+//            ComponentContainer.MY_TELEGRAM_BOT.sendMsg(deleteMessage);
+//
+//            List<Product> products = Database.productList.stream().filter(product -> product.getBrandId().equals(product.getId())).toList();
+//            SendMessage sendMessage = new SendMessage();
+//            sendMessage.setChatId(String.valueOf(user.getId()));
+//            sendMessage.setText("Asus Rog ");
+//            sendMessage.setReplyMarkup(InlineKeyboardUtil.productMenu(products));
+//            ComponentContainer.MY_TELEGRAM_BOT.sendMsg(sendMessage);
+//
+//
+//        }
     }
 }

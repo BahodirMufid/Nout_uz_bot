@@ -2,6 +2,7 @@ package com.company.util;
 
 
 import com.company.database.Database;
+import com.company.enums.Data;
 import com.company.model.Category;
 import com.company.model.Product;
 import com.company.service.CategoryService;
@@ -31,11 +32,11 @@ public class InlineKeyboardUtil {
 
 
     public static InlineKeyboardMarkup NetAddressMenu() {
-        InlineKeyboardButton instagram = getButton("📤 Instgram", "instagram_");
-        InlineKeyboardButton telegram = getButton("📤 Telegram", "telegram_");
-        InlineKeyboardButton facebook = getButton("📤 Facebook", "facebook");
-        InlineKeyboardButton webAddres = getButton("🌐 WebAddress", "web_");
-        InlineKeyboardButton back = getButton("◀ BACK", "back");
+        InlineKeyboardButton instagram = getButton("📤 Instgram",  String.valueOf(Data.INSTAGRAM));
+        InlineKeyboardButton telegram = getButton("📤 Telegram",  String.valueOf(Data.TELEGRAM));
+        InlineKeyboardButton facebook = getButton("📤 Facebook",  String.valueOf(Data.FACEBOOK));
+        InlineKeyboardButton webAddres = getButton("🌐 WebAddress",  String.valueOf(Data.WEB));
+        InlineKeyboardButton back = getButton("◀ BACK",  String.valueOf(Data.BACK));
 
         instagram.setUrl("https://www.instagram.com/noutuz");
         telegram.setUrl("https://t.me/nout_uz");
@@ -53,10 +54,10 @@ public class InlineKeyboardUtil {
 
 
     public static InlineKeyboardMarkup Menu() {
-        InlineKeyboardButton menuButton = getButton("📠PRODUCT MENU", "product_menu");
-        InlineKeyboardButton magazineButton = getButton("🏪MAGAZINE", "magazine");
-        InlineKeyboardButton contactButton = getButton("📞OUR CONTACTS", "our_contacts");
-        InlineKeyboardButton helpButton = getButton("💬HELP", "help");
+        InlineKeyboardButton menuButton = getButton("📠PRODUCT MENU", String.valueOf(Data.PRODUCT_MENU));
+        InlineKeyboardButton magazineButton = getButton("🏪MAGAZINE",  String.valueOf(Data.MAGAZINE));
+        InlineKeyboardButton contactButton = getButton("📞OUR CONTACTS",  String.valueOf(Data.OUR_CONTACTS));
+        InlineKeyboardButton helpButton = getButton("💬HELP",  String.valueOf(Data.HELP));
 
         magazineButton.setUrl("https://www.google.com/maps/place/Nout.uz+-+%D0%9C%D0%B0%D0%B3%D0%B0%D0%B7%D0%B8%D0%BD+%D0%9D%D0%BE%D1%83%D1%82%D0%B1%D1%83%D0%BA%D0%BE%D0%B2+N1/@41.3386395,69.2723408,15z/data=!4m5!3m4!1s0x0:0x7e8c159c995773ea!8m2!3d41.3386395!4d69.2723408");
         helpButton.setUrl("https://t.me/nout_uz");
@@ -86,17 +87,17 @@ public class InlineKeyboardUtil {
 //        return new InlineKeyboardMarkup(rowList);
 //    }
     public static InlineKeyboardMarkup Brands() {
-        InlineKeyboardButton asus = getButton("💻 ASUS", "asus");
-        InlineKeyboardButton aser = getButton("💻 ASER", "aser");
-        InlineKeyboardButton lenovo = getButton("💻 LENOVO", "lenovo");
-        InlineKeyboardButton msi = getButton("💻 MSI", "msi");
-        InlineKeyboardButton dell = getButton("💻 DELL", "dell");
-        InlineKeyboardButton hp = getButton("💻 HP", "hp");
-        InlineKeyboardButton microsoftOfice = getButton("💻 MICROSOFT OFICE", "microsoft_ofice");
-        InlineKeyboardButton razer = getButton("💻 RAZER", "razer");
-        InlineKeyboardButton lg = getButton("💻 LG", "lg");
-        InlineKeyboardButton samsung = getButton("💻 SAMSUNG", "samsung");
-        InlineKeyboardButton back = getButton("◀ BACK", "back");
+        InlineKeyboardButton asus = getButton("💻 ASUS", String.valueOf(Data.ASUS));
+        InlineKeyboardButton aser = getButton("💻 ASER",  String.valueOf(Data.ASER));
+        InlineKeyboardButton lenovo = getButton("💻 LENOVO",  String.valueOf(Data.LENOVO));
+        InlineKeyboardButton msi = getButton("💻 MSI",  String.valueOf(Data.MSI));
+        InlineKeyboardButton dell = getButton("💻 DELL",  String.valueOf(Data.DELL));
+        InlineKeyboardButton hp = getButton("💻 HP",  String.valueOf(Data.HP));
+        InlineKeyboardButton microsoftOfice = getButton("💻 MICROSOFT OFICE",  String.valueOf(Data.MICROSOFT_OFICE));
+        InlineKeyboardButton razer = getButton("💻 RAZER",  String.valueOf(Data.RAZER));
+        InlineKeyboardButton lg = getButton("💻 LG",  String.valueOf(Data.LG));
+        InlineKeyboardButton samsung = getButton("💻 SAMSUNG",  String.valueOf(Data.SAMSUNG));
+        InlineKeyboardButton back = getButton("◀ BACK",  String.valueOf(Data.BACK));
 
 
         List<InlineKeyboardButton> row1 = getRow(aser,asus);
@@ -163,8 +164,8 @@ public class InlineKeyboardUtil {
 
     public static InlineKeyboardMarkup confirmAddProductMarkup() {
 
-        InlineKeyboardButton commit = getButton("Ha", "add_product_commit");
-        InlineKeyboardButton cancel = getButton("Yo'q", "add_product_cancel");
+        InlineKeyboardButton commit = getButton("Ha",  String.valueOf(Data.ADD_PRODUCT_COMMIT));
+        InlineKeyboardButton cancel = getButton("Yo'q",  String.valueOf(Data.ADD_PRODUCT_CANCEL));
 
         return new InlineKeyboardMarkup(getRowList(getRow(commit, cancel)));
     }

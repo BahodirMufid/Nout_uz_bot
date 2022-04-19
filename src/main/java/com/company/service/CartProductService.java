@@ -8,10 +8,9 @@ import com.company.database.Database;
 import com.company.model.Product;
 
 import java.sql.*;
-import java.util.Optional;
 import java.util.Scanner;
 
-public class ProductService {
+public class CartProductService {
     static Scanner SCANNER_NUM = new Scanner(System.in);
 
     public static void loadProductList() {
@@ -52,16 +51,15 @@ public class ProductService {
         Connection connection = Database.getConnection();
         if (connection != null) {
 
-            String query = " INSERT INTO product(name, category_id, price,description ,image)" +
-                    " VALUES(?, ?, ?, ? , ?); ";
+            String query = " INSERT INTO product(name, category_id, price, image)" +
+                    " VALUES(?, ?, ?, ?); ";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
                 preparedStatement.setString(1, product.getName());
                 preparedStatement.setInt(2, product.getCategoryId());
                 preparedStatement.setDouble(3, product.getPrice());
-                preparedStatement.setString(4, product.getDescription());
-                preparedStatement.setString(5, product.getImage());
+                preparedStatement.setString(4, product.getImage());
 
                 int executeUpdate = preparedStatement.executeUpdate();
                 System.out.println(executeUpdate);
@@ -82,7 +80,7 @@ public class ProductService {
             System.out.print("O'chirmoqchi bolgan Mahsulotingizni id sini kiriting : ");
             int id = SCANNER_NUM.nextInt();
 
-            String query = " DELETE FROM product WHERE id = ? ";
+            String query = " DELETE FROM todo WHERE id = ? ";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
 
