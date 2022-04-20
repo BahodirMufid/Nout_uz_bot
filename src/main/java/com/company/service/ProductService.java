@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class ProductService {
+    static Scanner SCANNER_NUM = new Scanner(System.in);
 
     public static void loadProductList() {
         Connection connection = Database.getConnection();
@@ -21,7 +22,7 @@ public class ProductService {
 
                 Database.productList.clear();
 
-                String query = " SELECT * FROM product  WHERE NOT deleted; ";
+                String query = " SELECT * FROM product WHERE NOT deleted; ";
 
                 ResultSet resultSet = statement.executeQuery(query);
 
@@ -75,42 +76,26 @@ public class ProductService {
     }
 
 
-    public static void deleteProduct( Integer id) {
+    public static void deleteProduct(Product product) {
         Connection connection = Database.getConnection();
         if (connection != null) {
+            System.out.print("O'chirmoqchi bolgan Mahsulotingizni id sini kiriting : ");
+            int id = SCANNER_NUM.nextInt();
 
+            String query = " DELETE FROM product WHERE id = ? ";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-//            String query = " DELETE FROM product WHERE id = ? ";
-            String query = " UPDATE product SET deleted = true WHERE id = ? ";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
-
-                preparedStatement.setInt(1,id);
+                preparedStatement.setInt(1, id);
 
                 int executeUpdate = preparedStatement.executeUpdate();
+                System.out.println("executeUpdate = " + executeUpdate);
 
-             connection.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        }
 
 
-    } public static void updateProduct( Integer id) {
-        Connection connection = Database.getConnection();
-        if (connection != null) {
-
-
-            String query = " UPDATE product SET deleted = true WHERE deleted = false; ";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
-
-                preparedStatement.setInt(1,id);
-
-                int executeUpdate = preparedStatement.executeUpdate();
-
-             connection.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 }

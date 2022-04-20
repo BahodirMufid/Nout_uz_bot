@@ -26,7 +26,6 @@ public enum Data {
     OUR_CONTACTS,
     HELP,
     ADD_PRODUCT_COMMIT,
-    YOU_TUBE,
     ADD_PRODUCT_CANCEL
 
 }

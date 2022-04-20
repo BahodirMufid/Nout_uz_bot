@@ -6,7 +6,6 @@ import com.company.enums.Data;
 import com.company.model.Category;
 import com.company.model.Product;
 import com.company.service.CategoryService;
-import com.company.service.ProductService;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -18,10 +17,10 @@ import java.util.List;
 
 public class InlineKeyboardUtil {
     public static InlineKeyboardMarkup productAdminMenu() {
-        InlineKeyboardButton addButton = getButton("➕ Add product", "add_product");
-        InlineKeyboardButton updateButton = getButton("⏫ Update product", "update_product");
-        InlineKeyboardButton deleteButton = getButton("✖ Delete product", "delete_product");
-        InlineKeyboardButton listButton = getButton("📜 Show product list", "show_product_list");
+        InlineKeyboardButton addButton = getButton("➕Add product", "add_product");
+        InlineKeyboardButton updateButton = getButton("⏫Update product", "update_product");
+        InlineKeyboardButton deleteButton = getButton("✖Delete product", "delete_product");
+        InlineKeyboardButton listButton = getButton("📜Show product list", "show_product_list");
 
         List<InlineKeyboardButton> row1 = getRow(addButton, updateButton,listButton);
         List<InlineKeyboardButton> row2 = getRow(deleteButton);
@@ -36,7 +35,6 @@ public class InlineKeyboardUtil {
         InlineKeyboardButton instagram = getButton("📤 Instgram",  String.valueOf(Data.INSTAGRAM));
         InlineKeyboardButton telegram = getButton("📤 Telegram",  String.valueOf(Data.TELEGRAM));
         InlineKeyboardButton facebook = getButton("📤 Facebook",  String.valueOf(Data.FACEBOOK));
-        InlineKeyboardButton youTube = getButton("🎥 You Tube",  String.valueOf(Data.YOU_TUBE));
         InlineKeyboardButton webAddres = getButton("🌐 WebAddress",  String.valueOf(Data.WEB));
         InlineKeyboardButton back = getButton("◀ BACK",  String.valueOf(Data.BACK));
 
@@ -44,15 +42,13 @@ public class InlineKeyboardUtil {
         telegram.setUrl("https://t.me/nout_uz");
         facebook.setUrl("https://www.facebook.com/www.nout.uz");
         webAddres.setUrl("https://nout.uz/");
-        youTube.setUrl("https://www.youtube.com/channel/UCi4ZcVi58O-CVKRvdYJ_VYg/videos");
 
 
-        List<InlineKeyboardButton> row1 = getRow(instagram,facebook);
-        List<InlineKeyboardButton> row2 = getRow(telegram,youTube);
-        List<InlineKeyboardButton> row3 = getRow(webAddres);
-         List<InlineKeyboardButton> row4 = getRow(back);
+        List<InlineKeyboardButton> row1 = getRow(instagram,telegram,facebook);
+        List<InlineKeyboardButton> row2 = getRow(webAddres);
+         List<InlineKeyboardButton> row3 = getRow(back);
 
-        List<List<InlineKeyboardButton>> rowList = getRowList(row1,row2 ,row3,row4);
+        List<List<InlineKeyboardButton>> rowList = getRowList(row1,row2 ,row3);
         return new InlineKeyboardMarkup(rowList);
     }
 
@@ -61,21 +57,21 @@ public class InlineKeyboardUtil {
         InlineKeyboardButton menuButton = getButton("📠PRODUCT MENU", String.valueOf(Data.PRODUCT_MENU));
         InlineKeyboardButton magazineButton = getButton("🏪MAGAZINE",  String.valueOf(Data.MAGAZINE));
         InlineKeyboardButton contactButton = getButton("📞OUR CONTACTS",  String.valueOf(Data.OUR_CONTACTS));
-//        InlineKeyboardButton helpButton = getButton("💬HELP",  String.valueOf(Data.HELP));
+        InlineKeyboardButton helpButton = getButton("💬HELP",  String.valueOf(Data.HELP));
 
         magazineButton.setUrl("https://www.google.com/maps/place/Nout.uz+-+%D0%9C%D0%B0%D0%B3%D0%B0%D0%B7%D0%B8%D0%BD+%D0%9D%D0%BE%D1%83%D1%82%D0%B1%D1%83%D0%BA%D0%BE%D0%B2+N1/@41.3386395,69.2723408,15z/data=!4m5!3m4!1s0x0:0x7e8c159c995773ea!8m2!3d41.3386395!4d69.2723408");
-//        helpButton.setUrl("https://t.me/nout_uz");
+        helpButton.setUrl("https://t.me/nout_uz");
 
         List<InlineKeyboardButton> row1 = getRow(menuButton);
         List<InlineKeyboardButton> row2 = getRow(magazineButton , contactButton);
-//        List<InlineKeyboardButton> row3 = getRow(helpButton);
+        List<InlineKeyboardButton> row3 = getRow(helpButton);
 
-        List<List<InlineKeyboardButton>> rowList = getRowList(row1, row2);
+        List<List<InlineKeyboardButton>> rowList = getRowList(row1, row2,row3);
 
         return new InlineKeyboardMarkup(rowList);
     }
 
-//    public static InlineKeyboardMarkup updateMenu() {
+//    public static InlineKeyboardMarkup ProductMenu() {
 //        InlineKeyboardButton noutbookBrands = getButton("💻 Noutbook brands", "noutbook_brands");
 //        InlineKeyboardButton computersButton = getButton("🖥 Computers", "computers");
 //        InlineKeyboardButton accesoriesButton = getButton("🎧 Accesories", "accesories");
@@ -90,21 +86,6 @@ public class InlineKeyboardUtil {
 //
 //        return new InlineKeyboardMarkup(rowList);
 //    }
-
-    public static InlineKeyboardMarkup updateMenu() {
-        InlineKeyboardButton change_name = getButton("💻 Nomini O'zgartirish", "change_name");
-        InlineKeyboardButton change_price = getButton("🖥 Narhini O'zgartirish", "change_price");
-        InlineKeyboardButton change_description = getButton("🎧 Tafsilotini O'zgartirish ", "change_description");
-
-
-        List<InlineKeyboardButton> row1 = getRow(change_name,change_price);
-        List<InlineKeyboardButton> row2 = getRow(change_description);
-
-
-        List<List<InlineKeyboardButton>> rowList = getRowList(row1, row2);
-
-        return new InlineKeyboardMarkup(rowList);
-   }
     public static InlineKeyboardMarkup Brands() {
         InlineKeyboardButton asus = getButton("💻 ASUS", String.valueOf(Data.ASUS));
         InlineKeyboardButton aser = getButton("💻 ASER",  String.valueOf(Data.ASER));
@@ -134,7 +115,6 @@ public class InlineKeyboardUtil {
     }
 
     public static InlineKeyboardMarkup productMenu(List<Product> productList) {
-        ProductService.loadProductList();
 
         List<List<InlineKeyboardButton>> rowList = new LinkedList<>();
 
