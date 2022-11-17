@@ -10,10 +10,10 @@ import java.util.Map;
 
 public abstract class ComponentContainer {
 
-    public static final String BOT_TOKEN = "5157461088:AAFbJ73TEPbBfrfsvyOzI2CAm7Cj8WyxnI8";
-    public static final String BOT_NAME = "nout_uz_java_bot";
+    public static final String BOT_TOKEN = "";
+    public static final String BOT_NAME = "";
 
-    public static final String ADMIN_ID = "579220638";
+    public static final String ADMIN_ID = "";
 
     public static Noutuz MY_TELEGRAM_BOT;
 
